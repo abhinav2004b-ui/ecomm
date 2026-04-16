@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import HeroGrid from '../components/HeroGrid.astro';
+import IntelligenceSection from '../components/IntelligenceSection.astro';
+import DeepDives from '../components/DeepDives.astro';
+import NewsletterCard from '../components/NewsletterCard.astro';
+import Footer from '../components/Footer.astro';
+import { ShoppingBag, Settings } from 'lucide-astro';
+import { intelligenceData } from '../data/intelligence';
+
+const shopifyData = intelligenceData.filter(item => item.category === 'Shopify').slice(0, 3);
+const wooData = intelligenceData.filter(item => item.category === 'WooCommerce').slice(0, 3);
+---
+
+<BaseLayout title="Easy Ecom">
+  <Nav />
+  
+  <main class="main-content">
+    <HeroGrid />
+
+    <div class="content-sections">
+      <IntelligenceSection 
+        id="shopify-section" 
+        title="Shopify" 
+        items={shopifyData} 
+        type="emerald" 
+        icon={ShoppingBag} 
+      />
+
+      <IntelligenceSection 
+        id="woo-section" 
+        title="WooCommerce" 
+        items={wooData} 
+        type="purple" 
+        icon={Settings} 
+      />
+
+      <div class="bottom-layout container">
+        <div class="main-column">
+          <DeepDives />
+        </div>
+        <aside class="sidebar">
+          <NewsletterCard />
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .main-content {
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+  }
+
+  .content-sections {
+    margin-top: 5rem;
+  }
+
+  .bottom-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    padding-top: 4rem;
+    border-top: 2px solid var(--black);
+  }
+
+  @media (max-width: 1024px) {
+    .bottom-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding-top: 6rem;
+    }
+  }
+</style>

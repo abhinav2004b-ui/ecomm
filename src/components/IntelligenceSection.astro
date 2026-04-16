@@ -1,0 +1,251 @@
+---
+import { Circle, Zap } from 'lucide-astro';
+
+interface Item {
+  id: number;
+  title: string;
+  time: string;
+  tag: string;
+}
+
+interface Props {
+  id: string;
+  title: string;
+  items: Item[];
+  type: 'emerald' | 'purple';
+  icon: any;
+  showViewAll?: boolean;
+}
+
+const { id, title, items, type, icon: Icon, showViewAll = true } = Astro.props;
+---
+
+<section id={id} class={`intelligence-section container scroll-mt ${type}`}>
+  <div class="section-header">
+    <div class="header-left">
+      <div class={`icon-box ${type}`}>
+        <Icon size={24} />
+      </div>
+      <h2 class="section-title">{title}</h2>
+    </div>
+    {showViewAll && <a href={`/${type === 'emerald' ? 'shopify' : 'woocommerce'}`} class="view-all">View All</a>}
+  </div>
+
+  <div class="bento-grid">
+    {items.map((item) => (
+      <div class="bento-card" id={`item-${item.id}`}>
+        <div class="card-top">
+          <div class={`status-tag ${type}`}>
+            {type === 'emerald' ? <div class="status-square pulse"></div> : <Zap size={14} fill="currentColor" />}
+            <span>{item.tag}</span>
+          </div>
+          <h3 class="card-title">{item.title}</h3>
+        </div>
+        
+        <div class="card-bottom">
+          <span class="log-id">LOG #{item.id * 102}</span>
+          <span class="card-time">{item.time}</span>
+        </div>
+
+        <div class="card-bg-decoration">
+          <div class="circle"></div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .intelligence-section {
+    margin-bottom: 5rem;
+  }
+
+  .scroll-mt {
+    scroll-margin-top: 8rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--black);
+    margin-bottom: 2.5rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .icon-box {
+    padding: 0.75rem;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-box.emerald {
+    background: #008060;
+    color: var(--white);
+  }
+
+  .icon-box.purple {
+    background: #96588a;
+    color: var(--white);
+  }
+
+  .section-title {
+    font-size: 2.25rem;
+    line-height: 1;
+  }
+
+  .view-all {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid var(--black);
+    transition: var(--transition-fast);
+  }
+
+  .view-all:hover {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bento-card {
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    border: 2px solid var(--black);
+  }
+
+  .bento-card:hover {
+    transform: translateY(-8px);
+  }
+
+  /* Shopify Theme */
+  .intelligence-section.emerald .bento-card {
+    background: #004733; /* Deep Shopify Green */
+    color: #e6fffa;
+    border-color: #002e21;
+  }
+
+  .intelligence-section.emerald .bento-card:hover {
+    background: #005c42;
+    box-shadow: 0 20px 40px rgba(0, 71, 51, 0.2);
+  }
+
+  .intelligence-section.emerald .status-square {
+    background: #10b981;
+  }
+
+  /* WooCommerce Theme */
+  .intelligence-section.purple .bento-card {
+    background: #3c245c; /* Deep WooCommerce Purple */
+    color: #f5f3ff;
+    border-color: #2d1b46;
+  }
+
+  .intelligence-section.purple .bento-card:hover {
+    background: #4c2e75;
+    box-shadow: 0 20px 40px rgba(60, 36, 92, 0.2);
+  }
+
+  .intelligence-section.purple .status-tag {
+    color: #a78bfa;
+  }
+
+  .status-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .status-tag.emerald { color: var(--accent-shopify); }
+  .status-tag.purple { color: var(--accent-woo); }
+
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .card-title {
+    font-size: 2rem;
+    line-height: 1.1;
+    transition: var(--transition-fast);
+  }
+
+  .bento-card:hover .card-title {
+    color: var(--primary);
+  }
+
+  .intelligence-section:nth-of-type(even) .bento-card:hover .card-title {
+    color: var(--accent-woo);
+  }
+
+  .card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  .card-bg-decoration {
+    position: absolute;
+    bottom: -3rem;
+    right: -3rem;
+    opacity: 0.05;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+  }
+
+  .bento-card:hover .card-bg-decoration {
+    transform: scale(1.2) rotate(15deg);
+    opacity: 0.1;
+  }
+
+  .circle {
+    width: 15rem;
+    height: 15rem;
+    border: 3rem solid currentColor;
+    border-radius: 0;
+  }
+
+  @media (max-width: 768px) {
+    .section-title { font-size: 1.75rem; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card { aspect-ratio: auto; min-height: 300px; padding: 2rem; border-radius: 0; }
+  }
+</style>

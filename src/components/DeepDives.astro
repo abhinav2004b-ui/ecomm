@@ -1,0 +1,166 @@
+---
+const articles = [
+  {
+    id: 1,
+    category: 'Audit Report',
+    title: 'Testing 5 WooCommerce Product Addon Plugins: The 2026 Verdict',
+    author: 'Alex R.',
+    readTime: '18 MIN READ',
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e5381bb6e?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 2,
+    category: 'Case Study',
+    title: 'How $100M Brands are Structuring their Tech Stacks for 2026',
+    author: 'Alex R.',
+    readTime: '12 MIN READ',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 3,
+    category: 'Architecture',
+    title: 'The Rise of Headless: Why Liquid is finally losing its grip',
+    author: 'Alex R.',
+    readTime: '15 MIN READ',
+    image: 'https://images.unsplash.com/photo-1551288049-bbbda536639a?auto=format&fit=crop&q=80&w=600'
+  }
+];
+---
+
+<div class="deep-dives">
+  <div class="section-title-wrapper">
+    <h4 class="mini-title">The Deep Dives</h4>
+  </div>
+
+  <div class="article-list">
+    {articles.map((article) => (
+      <div class="article-item">
+        <div class="article-image-box">
+          <img src={article.image} alt={article.title} class="grayscale" />
+        </div>
+        <div class="article-content">
+          <span class="article-tag">{article.category}</span>
+          <h3 class="article-title">{article.title}</h3>
+          <div class="article-meta">
+            <span>By {article.author}</span>
+            <span class="dot">•</span>
+            <span class="read-time">{article.readTime}</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .deep-dives {
+    padding-top: 3rem;
+  }
+
+  .section-title-wrapper {
+    margin-bottom: 3rem;
+  }
+
+  .mini-title {
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    padding-bottom: 0.5rem;
+    border-bottom: 4px solid var(--black);
+    display: inline-block;
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .article-item {
+    display: flex;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--zinc-200);
+    cursor: pointer;
+    transition: var(--transition-fast);
+  }
+
+  .article-item:last-child {
+    border-bottom: none;
+  }
+
+  .article-image-box {
+    width: 320px;
+    height: 180px;
+    background: var(--zinc-100);
+    border-radius: 0;
+    overflow: hidden;
+    border: 2px solid var(--black);
+    flex-shrink: 0;
+  }
+
+  .article-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+  }
+
+  .article-item:hover .article-image-box img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  .article-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .article-tag {
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-title {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    transition: var(--transition-fast);
+  }
+
+  .article-item:hover .article-title {
+    color: var(--primary);
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--zinc-500);
+  }
+
+  .dot { opacity: 0.3; }
+  .read-time { font-family: monospace; font-style: italic; opacity: 0.8; }
+
+  @media (max-width: 1024px) {
+    .article-item { gap: 1.5rem; }
+    .article-image-box { width: 240px; height: 135px; }
+    .article-title { font-size: 1.75rem; }
+  }
+
+  @media (max-width: 768px) {
+    .article-item { flex-direction: column; }
+    .article-image-box { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+    .article-title { font-size: 1.5rem; }
+  }
+</style>

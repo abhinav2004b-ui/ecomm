@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="About">
+  <Nav />
+  
+  <main class="about-page">
+    <div class="container">
+      <header class="mini-header">
+        <nav class="breadcrumbs">
+          <a href="/" class="bc-link">EASY ECOM</a>
+          <span class="bc-sep">/</span>
+          <a href="/about" class="bc-link active">ABOUT</a>
+        </nav>
+      </header>
+
+      <section class="profile-hero">
+        <div class="profile-image-container">
+          <img src="/images/alex.png" alt="Alex R" class="profile-image" />
+        </div>
+        <div class="profile-info">
+          <h1 class="alex-name">ALEX R</h1>
+          <p class="alex-title">Ecommerce Specialist & Analyst</p>
+          <div class="mission-statement">
+            <h2 class="mission-tag">THE MISSION:</h2>
+            <p class="mission-text">NO GUESSING. JUST DATA.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-content">
+        <div class="content-grid">
+          <div class="content-block">
+            <h3>THE PROBLEM</h3>
+            <p>
+              The ecommerce ecosystem is a gold rush, but most founders are being sold "shovels" that don't actually dig. You’ve seen the paid affiliate lists - they tell you a plugin is "essential" because they get a commission, not because the code is efficient.
+            </p>
+            <p>
+              Every time you install an unvetted app on Shopify or a bloated plugin on WooCommerce, you aren't just adding a feature; you're adding a liability.
+            </p>
+          </div>
+
+          <div class="content-block">
+            <h3>THE SOLUTION: EASY ECOM</h3>
+            <p>
+              I created Easy Ecom to be the technical filter the industry lacks. I don’t do "top 10" lists based on vibes. I do audits. 
+            </p>
+            <p>
+              I test, break, and fix Shopify and WooCommerce stores so you don’t have to. When I review an app or a protocol, I’m looking at the raw math behind your margins and the stability of your checkout.
+            </p>
+          </div>
+
+          <div class="content-block">
+            <h3>WHO IS BEHIND THIS?</h3>
+            <p>
+              My background is in the technical trenches - testing, breaking, and fixing the architecture that powers high-volume stores. 
+            </p>
+            <p>
+              This site is my public ledger of those tests. It’s high-density research, editorial deep-dives, and technical protocols designed for the founder who cares more about their conversion rate than the hype.
+            </p>
+          </div>
+
+          <div class="content-block">
+            <h3>OUR CORE PROTOCOLS</h3>
+            <ul class="protocol-list">
+              <li>
+                <strong>Zero Affiliation:</strong> If a tool is featured here, it’s because it survived the test, not because someone paid for the slot.
+              </li>
+              <li>
+                <strong>Technical Transparency:</strong> We show the "why" behind the verdict - whether it’s a database query bottleneck or a bloated JavaScript execution.
+              </li>
+              <li>
+                <strong>Founder Focused:</strong> Content is written for the people who actually have to live with the technical decisions they make.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cta-section">
+          <p>Tired of guessing which plugin works? <a href="#" class="ledger-link">Join the Ledger</a> and let's look at the data.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-top: 8rem;
+    min-height: 100vh;
+    padding-bottom: 8rem;
+  }
+
+  .mini-header {
+    margin-bottom: 4rem;
+    border-bottom: 1px solid var(--zinc-200);
+    padding-bottom: 1rem;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+
+  .bc-link {
+    color: var(--zinc-500);
+    transition: var(--transition-fast);
+  }
+
+  .bc-link:hover {
+    color: var(--black);
+  }
+
+  .bc-link.active {
+    color: var(--black);
+  }
+
+  .bc-sep {
+    color: var(--zinc-300);
+  }
+
+  .profile-hero {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 6rem;
+  }
+
+  .profile-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 2px solid var(--black);
+    box-shadow: 20px 20px 0px var(--primary);
+  }
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: var(--transition-smooth);
+  }
+
+  .profile-image-container:hover .profile-image {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  .alex-name {
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.8;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .alex-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+    margin-bottom: 3rem;
+  }
+
+  .mission-statement {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-left: 8px solid var(--black);
+    padding-left: 2rem;
+  }
+
+  .mission-tag {
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--zinc-500);
+  }
+
+  .mission-text {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    max-width: 600px;
+    letter-spacing: -0.02em;
+  }
+
+  .about-content {
+    border-top: 2px solid var(--black);
+    padding-top: 5rem;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem 6rem;
+    margin-bottom: 6rem;
+  }
+
+  .content-block h3 {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--black);
+    margin-bottom: 2rem;
+    background: var(--primary);
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .content-block p {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--zinc-900);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .protocol-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .protocol-list li {
+    font-size: 1.15rem;
+    line-height: 1.4;
+    color: var(--zinc-800);
+  }
+
+  .protocol-list strong {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-section {
+    background: var(--black);
+    color: var(--white);
+    padding: 4rem;
+    text-align: center;
+  }
+
+  .cta-section p {
+    font-size: 1.75rem;
+    font-weight: 900;
+    font-style: italic;
+  }
+
+  .ledger-link {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    text-decoration-thickness: 3px;
+  }
+
+  @media (max-width: 1024px) {
+    .profile-hero { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+    .profile-image-container { max-width: 400px; margin: 0 auto; }
+    .mission-statement { margin: 0 auto; border-left: none; border-top: 8px solid var(--black); padding-left: 0; padding-top: 2rem; }
+    .content-grid { grid-template-columns: 1fr; gap: 4rem; }
+    .mission-text { font-size: 2.5rem; }
+  }
+
+  @media (max-width: 768px) {
+    .alex-name { font-size: 3.5rem; }
+    .cta-section { padding: 3rem 1.5rem; }
+    .cta-section p { font-size: 1.25rem; }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import IntelligenceSection from '../components/IntelligenceSection.astro';
+import Footer from '../components/Footer.astro';
+import { Settings } from 'lucide-astro';
+import { intelligenceData } from '../data/intelligence';
+
+const wooData = intelligenceData.filter(item => item.category === 'WooCommerce');
+---
+
+<BaseLayout title="WooCommerce">
+  <Nav />
+  
+  <main class="sub-page">
+    <div class="container">
+      <header class="mini-header">
+        <nav class="breadcrumbs">
+          <a href="/" class="bc-link">EASY ECOM</a>
+          <span class="bc-sep">/</span>
+          <a href="/woocommerce" class="bc-link active">WOOCOMMERCE</a>
+        </nav>
+      </header>
+    </div>
+
+    <IntelligenceSection 
+      id="woo-content" 
+      title="WooCommerce Protocols" 
+      items={wooData} 
+      type="purple" 
+      icon={Settings} 
+      showViewAll={false}
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .sub-page {
+    padding-top: 8rem;
+    min-height: 100vh;
+  }
+
+  .mini-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--zinc-200);
+    padding-bottom: 1rem;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+
+  .bc-link {
+    color: var(--zinc-500);
+    transition: var(--transition-fast);
+  }
+
+  .bc-link:hover {
+    color: var(--black);
+  }
+
+  .bc-link.active {
+    color: var(--black);
+  }
+
+  .bc-sep {
+    color: var(--zinc-300);
+  }
+
+  .purple { color: #8b5cf6; }
+
+  @media (max-width: 768px) {
+    .sub-page { padding-top: 6rem; }
+  }
+</style>

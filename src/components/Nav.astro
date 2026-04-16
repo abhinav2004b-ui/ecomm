@@ -1,0 +1,467 @@
+---
+import { Search, ShoppingBag, Settings, FlaskConical, Twitter, Linkedin, Instagram, Clock, FileText, ChevronRight, ArrowRight, CornerDownLeft } from 'lucide-astro';
+import { intelligenceData } from '../data/intelligence';
+---
+
+<!-- Search Backdrop -->
+<div id="search-backdrop" class="search-backdrop hidden"></div>
+
+<header id="main-header" class="header">
+  <div class="container header-inner">
+    <div class="nav-left">
+      <div class="logo">
+        <a href="/" class="logo-link">
+          <FlaskConical size={28} class="amber-fill" id="logo-icon" />
+          <h1 id="logo-text">EASY <span class="amber underline">ECOM</span></h1>
+        </a>
+      </div>
+      
+      <div class="search-container desktop-only">
+        <div class="search-bar" id="search-bar-wrapper">
+          <Search size={18} class="search-icon" />
+          <input 
+            type="text" 
+            id="global-search" 
+            placeholder="Search audits and tech updates..." 
+            autocomplete="off"
+          />
+          <div class="kbd-hint">
+            <span>/</span>
+          </div>
+          
+          <!-- Results Dropdown -->
+          <div id="search-results" class="search-results hidden">
+            <div class="search-results-header">
+              <span id="search-count">Recent Technical Logs</span>
+              <span class="technical-mark">Intelligence Ledger</span>
+            </div>
+            
+            <div id="results-list" class="results-list">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div class="search-results-footer">
+              <div class="shortcut-hints">
+                <span class="hint"><kbd>↑↓</kbd> Navigate</span>
+                <span class="hint"><kbd>Esc</kbd> Close</span>
+              </div>
+              <div class="footer-action">
+                <span>Press <kbd>↵</kbd> to audit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-links mobile-hide">
+        <a href="/shopify" class="nav-btn">
+          <ShoppingBag size={14} class="emerald" />
+          <span>Shopify</span>
+        </a>
+        <a href="/woocommerce" class="nav-btn">
+          <Settings size={14} class="purple" />
+          <span>WooCommerce</span>
+        </a>
+        <a href="/about" class="nav-btn">
+          <span>About</span>
+        </a>
+      </div>
+      <button class="subscribe-btn mobile-hide">Subscribe</button>
+      <div class="social-links">
+        <a href="https://x.com/alex_easyecom" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="X"><Twitter size={18} /></a>
+        <a href="https://www.linkedin.com/in/alex-e-ecom/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn"><Linkedin size={18} /></a>
+        <a href="#" class="social-icon" aria-label="Instagram"><Instagram size={18} /></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script define:vars={{ intelligenceData }}>
+  const header = document.getElementById('main-header');
+  const logoIcon = document.getElementById('logo-icon');
+  const searchInput = document.getElementById('global-search');
+  const resultsDiv = document.getElementById('search-results');
+  const resultsList = document.getElementById('results-list');
+  const searchBarWrapper = document.getElementById('search-bar-wrapper');
+  const backdrop = document.getElementById('search-backdrop');
+  const searchCount = document.getElementById('search-count');
+
+  let activeIndex = -1;
+  let currentResults = [];
+
+  // Scroll logic
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+      logoIcon?.setAttribute('size', '22');
+    } else {
+      header?.classList.remove('scrolled');
+      logoIcon?.setAttribute('size', '28');
+    }
+  });
+
+  const openSearch = () => {
+    backdrop.classList.remove('hidden');
+    resultsDiv.classList.remove('hidden');
+    searchBarWrapper.classList.add('focused');
+  };
+
+  const closeSearch = () => {
+    backdrop.classList.add('hidden');
+    resultsDiv.classList.add('hidden');
+    searchBarWrapper.classList.remove('focused');
+    activeIndex = -1;
+  };
+
+  searchInput?.addEventListener('focus', openSearch);
+  backdrop?.addEventListener('click', closeSearch);
+
+  const renderResults = (items) => {
+    if (items.length === 0) {
+      resultsList.innerHTML = `
+        <div class="no-results">
+          <div class="no-results-icon"><Search size={32} /></div>
+          <p>No technical logs found for current query.</p>
+        </div>
+      `;
+      return;
+    }
+
+    resultsList.innerHTML = items.map((item, index) => `
+      <a href="/${item.category.toLowerCase()}#item-${item.id}" 
+         class="search-item ${index === activeIndex ? 'active' : ''}"
+         onmouseenter="this.classList.add('active')"
+         onmouseleave="this.classList.remove('active')"
+      >
+        <div class="item-icon-box ${item.type}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="item-content">
+          <div class="item-meta">
+            <span class="item-tag ${item.type}">${item.tag}</span>
+            <span class="item-sep">•</span>
+            <span class="item-time">${item.time}</span>
+          </div>
+          <div class="item-title">${item.title}</div>
+          <div class="item-category">${item.category} Research</div>
+        </div>
+        <div class="item-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+    `).join('');
+  };
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    
+    if (query.length < 1) {
+      currentResults = intelligenceData.slice(0, 5);
+      searchCount.textContent = "Recent Technical Logs";
+    } else {
+      currentResults = intelligenceData.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.tag.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query)
+      ).slice(0, 6);
+      searchCount.textContent = `${currentResults.length} Result${currentResults.length !== 1 ? 's' : ''} Found`;
+    }
+
+    renderResults(currentResults);
+  });
+
+  // Keyboard navigation
+  searchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIndex = Math.min(activeIndex + 1, currentResults.length - 1);
+      renderResults(currentResults);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIndex = Math.max(activeIndex - 1, 0);
+      renderResults(currentResults);
+    } else if (e.key === 'Enter' && activeIndex > -1) {
+      const activeItem = currentResults[activeIndex];
+      window.location.href = `/${activeItem.category.toLowerCase()}#item-${activeItem.id}`;
+    } else if (e.key === 'Escape') {
+      closeSearch();
+      searchInput.blur();
+    }
+  });
+
+  // Global shortcuts
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === '/' || (e.metaKey || e.ctrlKey) && e.key === 'k') && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput?.focus();
+    }
+  });
+
+  // Initial render
+  currentResults = intelligenceData.slice(0, 5);
+  renderResults(currentResults);
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--white);
+    border-bottom: 2px solid var(--black);
+    padding: 1rem 0;
+    transition: var(--transition-smooth);
+  }
+
+  .header.scrolled {
+    padding: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Backdrop Blur */
+  .search-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 900;
+    transition: opacity 0.3s ease;
+  }
+
+  .search-backdrop.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  /* Premium Search Styles */
+  .search-container {
+    position: relative;
+    width: 400px;
+    z-index: 1001;
+  }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--zinc-50);
+    border: 2px solid var(--zinc-200);
+    padding: 0.6rem 1rem;
+    gap: 0.75rem;
+    border-radius: 1rem; /* User requested ROUNDED specifically for search */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .search-bar.focused {
+    background: var(--white);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1), 0 20px 40px rgba(0,0,0,0.1);
+    width: 120%;
+    margin-left: -10%;
+  }
+
+  .search-icon { color: var(--zinc-400); }
+  .search-bar.focused .search-icon { color: var(--primary); }
+
+  #global-search {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--black);
+  }
+
+  .kbd-hint {
+    background: var(--white);
+    border: 1px solid var(--zinc-200);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--zinc-400);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--zinc-200);
+    border-radius: 1.25rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    z-index: 1001;
+    overflow: hidden;
+    animation: slideIn 0.2s ease-out;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .search-results.hidden { display: none; }
+
+  .search-results-header {
+    background: var(--zinc-50);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--zinc-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--zinc-500);
+  }
+
+  .technical-mark { color: var(--primary); }
+
+  .results-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
+
+  .search-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    transition: var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .search-item:hover, .search-item.active {
+    background: var(--zinc-50);
+  }
+
+  .item-icon-box {
+    padding: 0.6rem;
+    background: var(--zinc-100);
+    border-radius: 0.5rem;
+    color: var(--zinc-500);
+    transition: var(--transition-fast);
+  }
+
+  .search-item.active .item-icon-box.emerald { background: #dcfce7; color: #059669; }
+  .search-item.active .item-icon-box.purple { background: #f3e8ff; color: #7c3aed; }
+
+  .item-content { flex: 1; min-width: 0; }
+
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .item-tag { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
+  .item-tag.emerald { color: #10b981; }
+  .item-tag.purple { color: #8b5cf6; }
+  .item-sep { color: var(--zinc-300); }
+  .item-time { font-size: 0.6rem; color: var(--zinc-400); font-weight: 600; }
+
+  .item-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.3;
+    margin-bottom: 0.15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .item-category { font-size: 0.7rem; color: var(--zinc-500); font-weight: 500; }
+
+  .item-arrow { opacity: 0; transform: translateX(-10px); transition: var(--transition-fast); color: var(--primary); }
+  .search-item.active .item-arrow { opacity: 1; transform: translateX(0); }
+
+  .search-results-footer {
+    padding: 0.75rem 1.25rem;
+    background: var(--zinc-50);
+    border-top: 1px solid var(--zinc-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    color: var(--zinc-400);
+    font-weight: 600;
+  }
+
+  .shortcut-hints { display: flex; gap: 1rem; }
+  .hint { display: flex; align-items: center; gap: 0.4rem; }
+  kbd { background: var(--white); border: 1px solid var(--zinc-300); border-radius: 3px; padding: 1px 4px; color: var(--zinc-600); }
+
+  /* Logo & Nav Logic */
+  .logo-link { display: flex; align-items: center; gap: 0.75rem; }
+  .logo h1 { font-size: 1.75rem; margin: 0; line-height: 1; transition: var(--transition-smooth); }
+  .header.scrolled h1 { font-size: 1.25rem; }
+
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-links { display: flex; gap: 0.75rem; }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+  }
+
+  .nav-btn:hover { background: var(--zinc-100); }
+
+  .subscribe-btn {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid var(--black);
+    background: transparent;
+    transition: var(--transition-fast);
+  }
+
+  .subscribe-btn:hover { background: var(--black); color: var(--white); }
+
+  .social-links { display: flex; gap: 1rem; }
+  .amber { color: var(--primary); }
+  .amber-fill { color: var(--primary); fill: var(--primary); }
+  .underline { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 4px; }
+  .emerald { color: #10b981; }
+  .purple { color: #8b5cf6; }
+
+  @media (max-width: 1024px) {
+    .search-container { width: 300px; }
+    .search-bar.focused { width: 100%; margin-left: 0; }
+  }
+
+  @media (max-width: 768px) {
+    .mobile-hide, .desktop-only { display: none; }
+  }
+</style>
